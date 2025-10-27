@@ -1,0 +1,68 @@
+<% 
+   const status = ["Not yet started 🔴", "Currently reading/paused 🟡", "Finished 🟢"];
+%>
+   <div class="book_list">
+      <% books.forEach((book) => { %> 
+      <% const read_id = book.book_read_id %>
+      <% const statusDisplayId = `status_display_${read_id}`; %>
+      <% const statusFormId = `status_form_${read_id}`; %>
+      <% const ratingDisplayId = `rating_display_${read_id}`; %>
+      <% const ratingFormId = `rating_form_${read_id}`; %>
+      <% const noteDisplayId = `note_display_${read_id}`; %>
+      <% const noteFormId = `note_form_${read_id}`; %>
+      
+
+      <div class="book">
+            <h2><%= book.title %></h2>
+            <h3><%= book.author %> - Genre: <%= book.genre %></h3>
+            <img src="<%= book.image_url %>" alt="book cover">
+
+            <!-- Status section -->
+            <div id="<%= statusDisplayId %>">
+               <h4>
+                  Your status: <%= status[Number(book.status)-1] %>
+               </h4>
+               <button onclick="toggleEdit('<%= statusDisplayId %>','<%= statusFormId %>')">✏️</button>
+            </div>
+            
+            <form id="status_form_<%= read_id %>" style="display: none;" onsubmit="updateStatus">
+               <select name="status" onchange="updateStatus(<%= read_id %>,this.value, '#<%= statusDisplayId %> h4')">
+                  <% status.forEach((status, index) => { %>
+                     <option value="<%= index + 1 %>"><%= status %></option> 
+                  <% }) %>
+               </select>
+            </form>
+
+            <!-- Rating section -->
+            <div id="<%= ratingDisplayId %>">
+               <h4>
+                  Your rating: <%= book.rating %>/10
+               </h4>
+               <button id="edit_rating_button_<%= read_id %>" onclick="toggleEdit('<%= ratingDisplayId %>','<%= ratingFormId %>')">✏️</button>
+            </div>
+            <fieldset id="<%= ratingFormId %>" style="display:none">
+               <legend>Rating: </legend>
+               <% for(i = 1; i <= 10; i++){ %>
+                     <label>
+                        <input type="radio" name="rating_<%= read_id %>" value="<%= i %>" <%= book.rating === i ? 'checked' : "" %> onclick="updateRating(<%= read_id %>, this.value, '#<%= ratingDisplayId %> h4')">
+                        <%= i %>
+                     </label>
+               <% } %>
+            </fieldset>
+
+            <!-- Note section -->
+            <fieldset>
+               <legend>Your note of the book: </legend>
+               <p id="<%= noteDisplayId %>" onclick="toggleEdit('<%= noteDisplayId %>','<%= noteFormId %>')"><%= book.note %></p>
+            <div id="<%= noteFormId %>" style="display:none">
+               <button onclick="updateNotes(<%= read_id %>,document.getElementById('text_area_<%= read_id %>').value,'#<%= noteDisplayId %>')">💾</button>
+               <textarea id="text_area_<%= read_id %>" rows="10" cols="30"><%= book.note %></textarea>
+            </div>
+            </fieldset>
+            <form action="/delete_read" method="POST">
+               <input type="hidden" name="id" value="<%= book.id %>">
+               <input type="submit" name="delete" value="Remove book from  ❌">
+            </form>
+      </div>
+   <% }) %>
+   </div>
