@@ -12,7 +12,7 @@
       <% const noteFormId = `note_form_${read_id}`; %>
       
 
-      <div class="book">
+      <div class="book" id="book_read_id_<%= read_id %>">
             <h2><%= book.title %></h2>
             <h3><%= book.author %> - Genre: <%= book.genre %></h3>
             <img src="<%= book.image_url %>" alt="book cover">
@@ -36,7 +36,7 @@
             <!-- Rating section -->
             <div id="<%= ratingDisplayId %>">
                <h4>
-                  Your rating: <%= book.rating %>/10
+                  Your rating: <%= book.rating %>/10 ⭐
                </h4>
                <button id="edit_rating_button_<%= read_id %>" onclick="toggleEdit('<%= ratingDisplayId %>','<%= ratingFormId %>')">✏️</button>
             </div>
@@ -52,17 +52,14 @@
 
             <!-- Note section -->
             <fieldset>
-               <legend>Your note of the book: </legend>
+               <legend>Notes</legend>
                <p id="<%= noteDisplayId %>" onclick="toggleEdit('<%= noteDisplayId %>','<%= noteFormId %>')"><%= book.note %></p>
             <div id="<%= noteFormId %>" style="display:none">
                <button onclick="updateNotes(<%= read_id %>,document.getElementById('text_area_<%= read_id %>').value,'#<%= noteDisplayId %>')">💾</button>
-               <textarea id="text_area_<%= read_id %>" rows="10" cols="30"><%= book.note %></textarea>
+               <textarea id="text_area_<%= read_id %>" rows="5" cols="30"><%= book.note %></textarea>
             </div>
             </fieldset>
-            <form action="/delete_read" method="POST">
-               <input type="hidden" name="id" value="<%= book.id %>">
-               <input type="submit" name="delete" value="Remove book from  ❌">
-            </form>
+            <button onclick="deleteRead(<%= read_id %>)">❌</button>
       </div>
    <% }) %>
    </div>

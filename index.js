@@ -188,12 +188,12 @@ app.post("/add-read", async (req, res) => {
 })
 
 // remove book from read list
-app.post("/delete_read", async (req, res) => {
+app.patch("/api/user/delete_read", async (req, res) => {
     const id = req.body.id;
     try {
         const result = await db.query("DELETE FROM book_reads WHERE id = $1", [id]);
         message = "Book removed";
-        res.redirect("/")
+        res.status(200).json({message: "Book removed!"})
     } catch (error) {
         console.error(error.stack)
     }
