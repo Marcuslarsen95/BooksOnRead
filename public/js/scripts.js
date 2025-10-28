@@ -1,7 +1,7 @@
 const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
 const status = ["Not yet started 🔴", "Currently reading/paused 🟡", "Finished 🟢"];
 
-/// input search api
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const inputSearch = document.getElementById('inputBookSearch');
@@ -26,7 +26,19 @@ document.addEventListener('DOMContentLoaded', () => {
         
     })
 
-    
+    function hideMessage(){
+        const message = document.getElementById('message');
+        if (message) {
+            setTimeout(() => {
+            message.classList.add('slide-out');
+                setTimeout(() => {
+                    message.style.display = "none";
+                },3000)
+            },3000)
+        }
+        
+    }
+    hideMessage();
 
     function searchBooksApi(query) {
         fetch(`/api/search-books?searchTerm=${encodeURIComponent(query)}`)
@@ -73,6 +85,14 @@ function toggle(e){
     const element = document.querySelector(e);
     element.classList.toggle('toggle');
     element.classList.toggle('invisible');
+}
+
+function show(e){
+    document.getElementById(e).style.display = "block";
+}
+
+function hide(e){
+    document.getElementById(e).style.display = "none";
 }
 
 async function updateStatus(bookReadId, newStatus, targetElement) {
