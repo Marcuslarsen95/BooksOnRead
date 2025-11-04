@@ -16,23 +16,25 @@ body {
   background-color: #030712;
 }
 
-p, h1, h2, h3, h4, a, label, legend {
+ul, ol {
+  list-style: none;
+}
+
+p, h1, h2, h3, h4, a, li, label, legend {
   color: #B9BABD;
   text-align: center;
 }
 
 button, .button {
-  background-color: #101d37;
-  border: 1px solid #323c4d;
-  width: 30px;
-  height: 25px;
-  border-radius: 25px;
+  padding: 5px;
 }
 
-
-
-.toggle {
+.toggle_block {
   display: block;
+}
+
+.toggle_flex {
+  display: flex;
 }
 
 .invisible {
@@ -62,36 +64,7 @@ header {
   gap: 10px;
 }
 
-/* message css */ 
 
-#message {
-  width: 200px;
-  padding: 10px;
-  text-align: center;
-  margin-bottom: 0;
-  position: fixed;
-  bottom: 50px;
-  left: 10px;
-  z-index: 99;
-  background-color: #101d37;
-  border: 1px solid white;
-  border-radius: 10px;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(100px); /* slide it further down */
-  }
-}
-
-#message.slide-out {
-  animation: slideDown 0.5s ease-out forwards;
-}
 
 /* header css */
 
@@ -146,6 +119,51 @@ nav {
   border-bottom: 1px solid #323c4d;
 }
 
+/* Utils styling */
+
+.utils {
+  position: fixed;
+  z-index: 2;
+  left:0;
+  top: 75px;
+}
+
+.utils_toggle {
+  background-color: #0e121b;
+  border: 1px solid #323c4d;
+  border-radius: 0 5px 5px 0;
+  font-size: 1.2em;
+}
+
+.utils_content {
+  width: 300px;
+  background-color: #0e121b;
+  border: 1px solid #323c4d;
+  padding: 10px;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sort, .filter {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sort_list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sort_list li {
+  border-bottom: 1px solid #323c4d;
+}
+
+.sort_list li:hover {
+  background-color: #323c4d;
+}
+
 /* book styling  */
 .book_list {
   display: flex;
@@ -159,30 +177,75 @@ nav {
   max-width: 700px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  flex-grow: 1;
+  align-items: stretch;
   gap: 5px;
   background-color: #0e121b;
   border: 1px solid #323c4d;
   border-radius: 10px;
-  padding: 20px 10px;
- 
+  padding: 10px;
 }
 
-.book fieldset {
+.book_section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 1px solid #323c4d;
+  padding: 10px;
+}
+
+.book > .book_section:last-of-type {
+  border-bottom: none;
+}
+
+.display_section,
+.edit_section,
+.delete_section {
+  width: 100%;
+  position: relative;
+}
+
+
+.display_section button,
+.edit_section button,
+.delete_section button {
+  background-color: #0e121b;
+  border-radius: 5px;
   border: 1px solid #323c4d;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  z-index: 1;
+}
+
+.display_section h4,
+.display_section p,
+.edit_section h4,
+.edit_section p {
+  width: 100%;
+  text-align: center;
+}
+
+
+.book .book_note fieldset {
+  border: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .book legend {
-  margin-left: 10px;
-  font-size: .6em;
+  margin: 0 0 5px 10px;
+  font-size: .8em;
 }
 
 .book fieldset p {
   min-height: 50px;
-  font-size: .8em;
-  text-align: left;
+  font-size: 1em;
+  text-align: center;
   padding: 5px;
-  line-height: .8em;
+  line-height: 1em;
+  border: 1px solid #323c4d;
 }
 
 .book textarea {
@@ -192,16 +255,43 @@ nav {
 .book img {
   width: 150px;
 }
+
 .book h2, h3, h4, p {
   margin: 0 0 10px 0;
 }
 
 .book h4 {
     display: inline-block;
-    width: 250px;
+    min-width: 250px;
 }
 
-.book p {
-    width: 250px;
-    margin: 0;
+/* message css */ 
+
+#message {
+  width: 200px;
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 0;
+  position: fixed;
+  bottom: 50px;
+  left: 10px;
+  z-index: 99;
+  background-color: #101d37;
+  border: 1px solid white;
+  border-radius: 10px;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(100px); /* slide it further down */
+  }
+}
+
+#message.slide-out {
+  animation: slideDown 0.5s ease-out forwards;
 }

@@ -1,65 +1,26 @@
 <% 
    const status = ["Not yet started 🔴", "Currently reading/paused 🟡", "Finished 🟢"];
-%>
-   <div class="book_list">
-      <% books.forEach((book) => { %> 
-      <% const read_id = book.book_read_id %>
-      <% const statusDisplayId = `status_display_${read_id}`; %>
-      <% const statusFormId = `status_form_${read_id}`; %>
-      <% const ratingDisplayId = `rating_display_${read_id}`; %>
-      <% const ratingFormId = `rating_form_${read_id}`; %>
-      <% const noteDisplayId = `note_display_${read_id}`; %>
-      <% const noteFormId = `note_form_${read_id}`; %>
-      
-
-      <div class="book" id="book_read_id_<%= read_id %>">
-            <h2><%= book.title %></h2>
-            <h3><%= book.author %> - Genre: <%= book.genre %></h3>
-            <img src="<%= book.image_url %>" alt="book cover">
-
-            <!-- Status section -->
-            <div id="<%= statusDisplayId %>">
-               <h4>
-                  Your status: <%= status[Number(book.status)-1] %>
-               </h4>
-               <button id="edit_status_button_<%= read_id %>" onclick="toggleEdit('<%= statusDisplayId %>','<%= statusFormId %>')">✏️</button>
-            </div>
-            
-            <form id="status_form_<%= read_id %>" style="display: none;" onsubmit="updateStatus" >
-               <select name="status" onchange="updateStatus(<%= read_id %>,this.value, '#<%= statusDisplayId %> h4')">
-                  <% status.forEach((status, index) => { %>
-                     <option value="<%= index + 1 %>"><%= status %></option> 
-                  <% }) %>
-               </select>
-            </form>
-
-            <!-- Rating section -->
-            <div id="<%= ratingDisplayId %>">
-               <h4>
-                  Your rating: <%= book.rating %>/10 ⭐
-               </h4>
-               <button id="edit_rating_button_<%= read_id %>" onclick="toggleEdit('<%= ratingDisplayId %>','<%= ratingFormId %>')">✏️</button>
-            </div>
-            <fieldset id="<%= ratingFormId %>" style="display:none">
-               <legend>Rating: </legend>
-               <% for(i = 1; i <= 10; i++){ %>
-                     <label>
-                        <input type="radio" name="rating_<%= read_id %>" value="<%= i %>" <%= book.rating === i ? 'checked' : "" %> onclick="updateRating(<%= read_id %>, this.value, '#<%= ratingDisplayId %> h4')">
-                        <%= i %>
-                     </label>
-               <% } %>
-            </fieldset>
-
-            <!-- Note section -->
-            <fieldset>
-               <legend>Notes</legend>
-               <p id="<%= noteDisplayId %>" onclick="toggleEdit('<%= noteDisplayId %>','<%= noteFormId %>')"><%= book.note %></p>
-            <div id="<%= noteFormId %>" style="display:none">
-               <button id="note_button_update_<%= read_id %>" onclick="updateNotes(<%= read_id %>,document.getElementById('text_area_<%= read_id %>').value,'#<%= noteDisplayId %>')">💾</button>
-               <textarea id="text_area_<%= read_id %>" rows="5" cols="30"><%= book.note %></textarea>
-            </div>
-            </fieldset>
-            <button onclick="deleteRead(<%= read_id %>)">❌</button>
+%> 
+   <div class="utils">
+      <button class="utils_toggle">📚</button>
+      <div class="utils_content invisible">
+         <div class="sort">
+            <h4>Sorting</h4>
+            <ul class="sort_list">
+               <li class="sort_button" data-sort-by="read_finished" data-sort-dir="ASC">Read date ⬆️</li>
+               <li class="sort_button" data-sort-by="read_finished" data-sort-dir="DESC">Read date ⬇️</li>
+               <li class="sort_button" data-sort-by="books.title" data-sort-dir="ASC">Book name ⬆️</li>
+               <li class="sort_button" data-sort-by="books.title" data-sort-dir="DESC">Book name ⬇️</li>
+               <li class="sort_button" data-sort-by="ratings.rating" data-sort-dir="ASC">Your rating ⬆️</li>
+               <li class="sort_button" data-sort-by="ratings.rating" data-sort-dir="DESC">Your rating ⬇️</li>
+               <li class="sort_button" data-sort-by="status" data-sort-dir="ASC">Your status ⬆️</li>
+               <li class="sort_button" data-sort-by="status" data-sort-dir="DESC">Your status ⬇️</li>
+            </ul>
+         </div>
+         <div class="filter">
+         </div>
       </div>
-   <% }) %>
+   </div> 
+   <div class="book_list" id="book_list">
+   <script type="module" src="/js/main.js"></script>
    </div>
