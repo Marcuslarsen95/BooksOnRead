@@ -78,28 +78,28 @@ app.get("/api/users/get-reads", async (req, res) => {
     const page_offset = (page -1) * limit;  
     const sort_by = req.query.sortby;
     const sortDir = req.query.sort;
+    const where_clause = req.query.where ? `AND ${req.query.where}` : "";
     const values = [
         req.query.user_id,
         page_offset,
         limit,
     ];
-    try {
-        const result = await db.query(
-            `SELECT * 
+
+    const query = `SELECT * 
             FROM book_reads 
             JOIN books ON book_reads.book_api_id = books.book_id 
             JOIN notes ON book_reads.id = notes.book_read_id 
             JOIN ratings ON book_reads.id = ratings.book_read_id 
-            WHERE user_id = $1 
+            WHERE user_id = $1 ${where_clause}
             ORDER BY ${sort_by} ${sortDir}
             LIMIT $3 
-            OFFSET $2`
-            ,values
-        );
+            OFFSET $2`;
+    console.log(query);
+    try {
+        const result = await db.query(query,values);
 
         const countRes = await db.query("SELECT COUNT(*) FROM book_reads WHERE user_id = $1", [user_id]);
         const total = parseInt(countRes.rows[0].count, 10);
-
         res.json({
             ok: true, 
             page,

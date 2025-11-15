@@ -33,11 +33,11 @@ button, .button {
   display: block;
 }
 
-.toggle_flex {
+.toggle_flex, .hide_on_desktop {
   display: flex;
 }
 
-.invisible {
+.invisible, .hide_on_mobile {
   display: none;
 }
 
@@ -122,6 +122,9 @@ nav {
 /* Utils styling */
 
 .utils {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   position: fixed;
   z-index: 2;
   left:0;
@@ -133,6 +136,7 @@ nav {
   border: 1px solid #323c4d;
   border-radius: 0 5px 5px 0;
   font-size: 1.2em;
+  width: 40px;
 }
 
 .utils_content {
@@ -141,27 +145,35 @@ nav {
   border: 1px solid #323c4d;
   padding: 10px;
   flex-direction: column;
-  gap: 5px;
+  gap: 20px;
 }
 
 .sort, .filter {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
 }
 
 .sort_list {
   display: flex;
   flex-direction: column;
-  gap: 5px;
 }
 
 .sort_list li {
   border-bottom: 1px solid #323c4d;
+  padding: 5px;
 }
 
 .sort_list li:hover {
   background-color: #323c4d;
+}
+
+.filter input {
+  padding: 5px;
+}
+
+.filter_options {
+  padding: 5px;
 }
 
 /* book styling  */
@@ -192,9 +204,11 @@ nav {
   align-items: center;
   border-bottom: 1px solid #323c4d;
   padding: 10px;
+  position: relative
 }
 
-.book > .book_section:last-of-type {
+.book > .book_section:last-of-type,
+.book > .book_section:first-of-type {
   border-bottom: none;
 }
 
@@ -205,13 +219,18 @@ nav {
   position: relative;
 }
 
+.delete_section {
+  align-items: end;
+}
 
-.display_section button,
-.edit_section button,
-.delete_section button {
+
+.book button {
   background-color: #0e121b;
   border-radius: 5px;
   border: 1px solid #323c4d;
+}
+
+.toggle_edit {
   position: absolute;
   top: 0px;
   right: 0px;
@@ -226,6 +245,34 @@ nav {
   text-align: center;
 }
 
+.delete_button_container {
+  width: 100%;
+  height: 20px;
+  position: relative;
+}
+
+.delete_read {
+  width: 30px;
+  position: absolute;
+  right: -10px;
+}
+
+.book_status_form {
+  color: white;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.status_radio {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.status_radio label {
+  width: 150px;
+}
 
 .book .book_note fieldset {
   border: 0;
@@ -250,6 +297,13 @@ nav {
 
 .book textarea {
   min-height: 50px;
+}
+
+.book .save_note {
+  position: absolute;
+  bottom: 50px;
+  right: 0px;
+  z-index: 1;
 }
 
 .book img {
@@ -294,4 +348,17 @@ nav {
 
 #message.slide-out {
   animation: slideDown 0.5s ease-out forwards;
+}
+
+@media (max-width: 768px){
+  
+}
+
+@media (min-width: 769px){
+  .hide_on_mobile {
+    display: flex;
+  }
+  .hide_on_desktop {
+    display: none;
+  }
 }

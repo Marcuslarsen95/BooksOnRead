@@ -1,7 +1,7 @@
 import { toggle } from '../utils.js';
 
 export async function updateStatus(read_id, value, triggerEl) {
-    const status = ["Not yet started 🔴", "Currently reading/paused 🟡", "Finished 🟢"];
+    const status = ["To read", "Reading", "Completed"];
     const section = triggerEl.closest('.book_section');
     const displayEl = section.querySelector('.display_section');
     const text = displayEl.querySelector('h4');

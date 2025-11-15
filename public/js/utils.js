@@ -6,3 +6,9 @@ export function toggle(e, d = "block"){
     e.classList.toggle('invisible');
 }
 
+export function toggleClass(e, add, remove){
+    if (!e) return;
+    e.classList.toggle(add);
+    e.classList.toggle(remove);
+}
+

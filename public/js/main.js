@@ -4,8 +4,26 @@ import { updateStatus } from "./api/updateStatus.js";
 import { updateRating } from './api/updateRating.js';
 import { updateNotes } from './api/updateNotes.js';
 import { deleteRead } from './api/deleteRead.js';
-import { toggle } from './utils.js';
+import { toggle, toggleClass } from './utils.js';
 
+
+// global variables 
+
+let sortBy = "book_reads.read_finished";
+let sortDir = "DESC";
+
+/// functions 
+
+const filter_select = document.getElementById('filter_select');
+const getElements = e => document.querySelectorAll(`.filter_input_${e}`);
+
+async function handleFilterOptions(){
+    const value = filter_select.value;
+    const options = ['text','date','number','status'];
+
+    options.forEach(e => {getElements(e).forEach(el => el.classList.add('invisible'))});
+    getElements(value).forEach(el => el.classList.remove('invisible'));
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -19,6 +37,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const SearchResults = document.getElementById('searchResults');
     const SearchResultsList = document.getElementById('searchResultsList');
     let debouncetimer;
+
+    
 
     inputSearch.addEventListener('keyup', (event) => {
         const query = inputSearch.value.trim();
@@ -51,7 +71,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     hideMessage();
 
+    const form = document.querySelector('#filter_form');
 
+    form.addEventListener('submit', event => {
+        event.preventDefault(); // ⛔ stops the page from reloading
+        handleFilterOptions();  // ✅ run your filter logic or custom behavior
+    });
+
+
+    handleFilterOptions()
 
     function searchBooksApi(query) {
         fetch(`/api/search-books?searchTerm=${encodeURIComponent(query)}`)
@@ -92,7 +120,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // change event= handler 
 document.addEventListener('change', (e) => {
-    if (e.target.matches('select.status_select')){
+    if (e.target.matches('.edit_status_radio')){
         const read_id = e.target.dataset.readId;
         updateStatus(read_id,e.target.value,e.target)
     }
@@ -101,12 +129,27 @@ document.addEventListener('change', (e) => {
         const read_id = e.target.dataset.readId;
         updateRating(read_id, e.target.value, e.target)
     }
+
+    /// filtering
+    if (e.target.matches('.filter_options')){
+        const value = e.target.value;
+        var where_clause = "";
+        if (value === "date"){
+            toggle(document.querySelector('.filter_date','block'));
+            toggle(document.querySelector('.filter_number','block'))
+            toggleClass(document.querySelector('.filter_text'),"invisible");
+        }
+    }
+
+    handleFilterOptions()
 })
 
 // click event handler 
 document.addEventListener('click', async (e) => {
-    if (e.target.closest('.toggle_edit')) {  
-        const section = e.target.closest('.book_section');
+    if (e.target.closest('.toggle_edit')) {
+        const target = e.target.closest('.toggle_edit');
+        const section = target.closest('.book_section');
+        
         if (!section){
             return
         }
@@ -114,7 +157,12 @@ document.addEventListener('click', async (e) => {
         const edit_section = section.querySelector('.edit_section');  
         if (display_section && edit_section) {
             toggle(display_section);
-            toggle(edit_section);
+            toggle(edit_section, "flex");
+            if(display_section.classList.contains('invisible')){
+                target.innerHTML = "↩️"
+            } else {
+                target.innerHTML = "✏️"
+            }
         }
     }
 
@@ -149,9 +197,9 @@ document.addEventListener('click', async (e) => {
         const toggleBtn = e.target.closest('.utils_toggle');
         const section = e.target.closest('.utils');
         const content = section.querySelector('.utils_content')
-        toggle(content, "flex");
+        toggleClass(content, "toggle_flex","hide_on_mobile");
 
-        if (!content.classList.contains('invisible')){
+        if (!content.classList.contains('hide_on_mobile')){
             toggleBtn.innerHTML = "❌"
         } else {
             toggleBtn.innerHTML = "📚"
@@ -160,12 +208,52 @@ document.addEventListener('click', async (e) => {
 
     if (e.target.closest('.sort_button')){
         const target = e.target.closest('.sort_button');
-        const sortBy = target.dataset.sortBy;
-        const sortDir = target.dataset.sortDir;
-
-        try {
+        sortBy = target.dataset.sortBy;
+        sortDir = target.dataset.sortDir;
+        const btn = document.querySelector('.utils_toggle');
+        const section = e.target.closest('.utils');
+        const content = section.querySelector('.utils_content')
+        try {   
             const books = await getUserBooks(1,1,10,sortBy,sortDir);
             renderBooks(books.data);
+            toggle(content, 'block')
+            if (!content.classList.contains('invisible')){
+                btn.innerHTML = "❌"
+            } else {
+                btn.innerHTML = "📚"
+            }
+        } catch (err) {
+            console.error("Error loading books:", err);
+        }
+    }
+
+    if (e.target.closest('.filter_button')){
+        const section = e.target.closest('.utils');
+        const content = section.querySelector('.utils_content')
+        const input = content.querySelector('input').value;
+        const filter_field = content.querySelector('.filter_options').value;
+        let filter_query = "";
+        switch (filter_field) {
+            case 'text':
+                filter_query = `books.title ILIKE '%${input}%' OR books.author ILIKE '%${input}%'`;
+                break;
+            case 'number':
+                filter_query = `ratings.rating ${input}`;
+                break;
+        }
+        
+        console.log(filter_query);
+        const btn = document.querySelector('.utils_toggle');
+        
+        try {   
+            const books = await getUserBooks(1,1,10,sortBy,sortDir, filter_query);
+            renderBooks(books.data);
+            toggle(content, 'block')
+            if (!content.classList.contains('invisible')){
+                btn.innerHTML = "❌"
+            } else {
+                btn.innerHTML = "📚"
+            }
         } catch (err) {
             console.error("Error loading books:", err);
         }

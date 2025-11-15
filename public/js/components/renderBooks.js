@@ -1,5 +1,5 @@
 export function renderBooks(books){
-    const status = ["Not yet started 🔴", "Currently reading/paused 🟡", "Finished 🟢"];
+    const status = ["To read", "Reading", "Completed"];
     const container = document.getElementById('book_list');
 
     if (!container){
@@ -11,9 +11,7 @@ export function renderBooks(books){
 
     return `
       <div class="book" data-read-id="${read_id}" id="book_read_id_${read_id}">
-      <div class="delete_section">
-          <button class="delete_read">❌</button>
-        </div>
+      
         <div class="book_section">
           <h2>${book.title}</h2>
           <h3>${book.author} - Genre: ${book.genre}</h3>
@@ -23,23 +21,24 @@ export function renderBooks(books){
         <div class="book_section book_status" data-read-id="${read_id}">
           <div class="display_section status_section">
             <h4>Your status: ${status[Number(book.status) - 1]}</h4>
-            <button class="toggle_edit">✏️</button>
+            
           </div>
-        
+          <button class="toggle_edit">✏️</button>
           <form class="book_status_form edit_section invisible" onsubmit="event.preventDefault()">
-            <select name="status" class="status_select" data-read-id="${read_id}">
-              ${status.map((label, index) => `
-                <option value="${index + 1}">${label}</option>
+          ${status.map((label, index) => `
+                <div class="status_radio">
+                  <label>${label}</label>
+                  <input type="radio" class="edit_status_radio" name="status_${read_id}" value="${index + 1}" data-read-id=${read_id} ${Number(book.status) === index + 1 ? "checked" : ""}>
+                </div>
               `).join('')}
-            </select>
           </form>
         </div>
         <!-- Rating section -->
         <div class="book_section book_rating" data-read-id="${read_id}">
           <div class="display_section" data-read-id="${read_id}">
             <h4>Your rating: ${book.rating}/10 ⭐</h4>
-            <button class="toggle_edit">✏️</button>
           </div>
+          <button class="toggle_edit">✏️</button>
           <fieldset class="edit_section invisible">
             <legend>Rating:</legend>
             ${Array.from({ length: 10 }, (_, i) => {
@@ -59,12 +58,10 @@ export function renderBooks(books){
           <div class="display_section">
             <fieldset>
               <legend>Your note on the book: </legend>
-              
               <p>${book.note}</p>
-              <button class="toggle_edit">✏️</button>
             </fieldset>
-            
           </div>
+          <button class="toggle_edit">✏️</button>
           <div class="edit_section invisible">
             <fieldset>
               <legend>Edit Notes</legend>
@@ -72,7 +69,9 @@ export function renderBooks(books){
             </fieldset>
             <button class="save_note">💾</button>
           </div>
-
+        <div class="delete_button_container">
+          <button class="delete_read">❌</button>
+        </div>    
           
         </div>
         

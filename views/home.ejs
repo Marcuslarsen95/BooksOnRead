@@ -2,9 +2,9 @@
    const status = ["Not yet started 🔴", "Currently reading/paused 🟡", "Finished 🟢"];
 %> 
    <div class="utils">
-      <button class="utils_toggle">📚</button>
-      <div class="utils_content invisible">
-         <div class="sort">
+      <button class="utils_toggle hide_on_desktop">📚</button>
+      <div class="utils_content hide_on_mobile">
+         <div class="sort utils_section">
             <h4>Sorting</h4>
             <ul class="sort_list">
                <li class="sort_button" data-sort-by="read_finished" data-sort-dir="ASC">Read date ⬆️</li>
@@ -17,7 +17,33 @@
                <li class="sort_button" data-sort-by="status" data-sort-dir="DESC">Your status ⬇️</li>
             </ul>
          </div>
-         <div class="filter">
+         <div class="filter utils_section">
+            <h4>Filters</h4>
+            <form action="" id="filter_form">
+               <input type="text" name="filter-value" class="filter_input filter_text filter_input_text filter_input_number" placeholder="Your query here...">
+               <input type="date" name="filter_value" class="filter_input filter_date filter_input_date">
+
+               <select name="number_filters" class="filter_number filter_input_number">
+                  <option value="greater">Greater than/After</option>
+                  <option value="less">Less than/Before</option>
+                  <option value="equal">Equal to</option>
+                  <option value="between">Between</option>
+               </select>
+
+               <select name="status_filters" class="filter_number filter_input_status">
+                  <option value="1">Not yet started</option>
+                  <option value="2">Currently reading/paused</option>
+                  <option value="3">Finished</option>
+               </select>
+               
+               <select name="filter_options" class="filter_options" id="filter_select">
+                  <option value="text" selected>Name/author</option>
+                  <option value="number">Rating</option>
+                  <option value="date">Read date</option>
+                  <option value="status">Status</option>
+               </select>
+               <button class="filter_button">🔎</button>
+            </form>
          </div>
       </div>
    </div> 

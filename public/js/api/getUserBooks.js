@@ -1,4 +1,4 @@
-export async function getUserBooks(user_id, page = 1, limit = 10, sortby = "book_reads.read_finished", sort = "DESC"){
+export async function getUserBooks(user_id, page = 1, limit = 10, sortby = "book_reads.read_finished", sort = "DESC", where = null){
     const query = new URLSearchParams({
         user_id,
         page,
@@ -6,6 +6,11 @@ export async function getUserBooks(user_id, page = 1, limit = 10, sortby = "book
         sortby,
         sort
     });
+
+    if (where) {
+        query.append('where', where);
+    }
+
     const res = await fetch(`/api/users/get-reads?${query.toString()}`, {
         method:'GET',
         headers: {
