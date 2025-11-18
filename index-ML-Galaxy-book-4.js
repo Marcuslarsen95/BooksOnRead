@@ -58,7 +58,7 @@ app.get("/", async (req, res) => {
             "SELECT * FROM book_reads JOIN books ON book_reads.book_api_id = books.book_id JOIN notes ON book_reads.id = notes.book_read_id JOIN ratings ON book_reads.id = ratings.book_read_id WHERE user_id = $1 ORDER BY book_reads.read_finished DESC"
             , [user_id]
         )
-        // console.log(result.rows);
+        console.log(result.rows);
         res.render('home', {
             message: message,
             books: result.rows 
@@ -78,41 +78,14 @@ app.get("/api/users/get-reads", async (req, res) => {
     const page_offset = (page -1) * limit;  
     const sort_by = req.query.sortby;
     const sortDir = req.query.sort;
-    let where_clause_string = "";
-    
+    const filter = req.query.filter || "";
 
     // handle filters 
-    const filter = req.query.filter || "";
-    let where_clauses = [];
     let filters = {};
-    const modifiers = {
-                greater: '>',
-                less: '<',
-                equal: '='
-            };
     try {
         filters = JSON.parse(filter);
-
-        // title and author query
-        if (filters.filter_text_query){
-            where_clauses.push(` AND (books.title ILIKE '%${filters.filter_text_query}%' OR books.author ILIKE '%${filters.filter_text_query}%')`);
-        }
-
-        // rating query
-        if (filters.radio_rating && filters.filter_rating_value){
-            
-            const mod = modifiers[filters.radio_rating] || '';
-            where_clauses.push(`AND ratings.rating ${mod} ${filters.filter_rating_value}`);
-        }
-
-        // read date query
-        if (filters.filter_date_value && filters.radio_date){
-            const mod = modifiers[filters.radio_date] || '';
-            where_clauses.push(`AND read_finished ${mod} '${filters.filter_date_value}'`);
-        }
-        where_clause_string = where_clauses.join(" ");
     } catch (err) {
-        console.log(err);
+        console.log(error);
     }
 
     const values = [
@@ -126,7 +99,7 @@ app.get("/api/users/get-reads", async (req, res) => {
             JOIN books ON book_reads.book_api_id = books.book_id 
             JOIN notes ON book_reads.id = notes.book_read_id 
             JOIN ratings ON book_reads.id = ratings.book_read_id 
-            WHERE user_id = $1 ${where_clause_string}
+            WHERE user_id = $1 
             ORDER BY ${sort_by} ${sortDir}
             LIMIT $3 
             OFFSET $2`;

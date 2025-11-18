@@ -20,39 +20,40 @@
          <div class="filter utils_section">
             <h4>Filters</h4>
             <form action="" id="filter_form">
-            <div class="filter_section">
-               <label for="filter-value_text">Author/Name</label>
-               <input type="text" name="filter-value_text" class="filter_input filter_text filter_input_text" placeholder="Your query here...">
-            </div>
-            <div class="filter_section">
-               <label for="">Rating: </label>
-                  <input type="radio" value="greater" name="radio_rating"><label for="greater_than">Greater than</label>
-                  <input type="radio" value="lower" name="radio_rating"><label for="greater_than">Lower than</label>
-                  <input type="radio" value="equal" name="radio_rating"><label for="equal">Equal to</label>
-               <input type="number" name="filter-value_number" class="filter_input filter_number filter_input_number" placeholder="E.g 1, 2, 10">
-            </div>
-            
-            <div class="filter_section">
-               <label for="filter_value_date">Read date: </label>
-               <input type="radio" value="greater" name="radio_date"><label for="greater_than">After date</label>
-                  <input type="radio" value="lower" name="radio_date"><label for="greater_than">Before date</label>
-                  <input type="radio" value="equal" name="radio_date"><label for="equal">Is date</label>
-               <input type="date" name="filter_value_date" class="filter_input filter_date filter_input_date">
-            </div>
-            
-            <div class="filter_section">
-               <label for="status_filters">Status: </label>
-               <select name="status_filters" class="filter_number filter_input_status">
-                  <option value="1">Not yet started</option>
-                  <option value="2">Currently reading/paused</option>
-                  <option value="3">Finished</option>
-               </select>
-            </div>
-
+               <div class="filter_section">
+                  <label for="filter_text_query">Author/Name</label>
+                  <input type="text" name="filter_text_query" class="filter_input filter_text filter_input_text" placeholder="Your query here...">
+                  <button class="clear_input_btn" type="button">Clear input</button>
+               </div>
+               <div class="filter_section">
+                  <label for="filter_rating_value">Rating: </label>
+                     <input type="radio" value="greater" name="radio_rating"><label for="greater_than">Greater than</label>
+                     <input type="radio" value="less" name="radio_rating"><label for="greater_than">Lower than</label>
+                     <input type="radio" value="equal" name="radio_rating"><label for="equal">Equal to</label>
+                  <input type="number" name="filter_rating_value" class="filter_input filter_number filter_input_number" placeholder="E.g 1, 2, 10">
+                  <button class="clear_input_btn" type="button">Clear input</button>
+               </div>
                
-
+               <div class="filter_section">
+                  <label for="filter_date_value">Read date: </label>
+                  <input type="radio" value="greater" name="radio_date"><label for="greater_than">After date</label>
+                     <input type="radio" value="less" name="radio_date"><label for="greater_than">Before date</label>
+                     <input type="radio" value="equal" name="radio_date"><label for="equal">Is date</label>
+                  <input type="date" name="filter_date_value" class="filter_input filter_date filter_input_date">
+                  <button class="clear_input_btn" type="button">Clear input</button>
+               </div>
                
-               <button class="filter_button">Apply 🔎</button>
+               <div class="filter_section">
+                  <label for="filter_status_value">Status: </label>
+                  <select name="filter_status_value" class="filter_number filter_input_status">
+                     <option value="1">Not yet started</option>
+                     <option value="2">Currently reading/paused</option>
+                     <option value="3">Finished</option>
+                  </select>
+                  <button class="clear_input_btn">Clear input</button>
+               </div>
+
+               <button class="filter_button" type="button">Apply 🔎</button>
             </form>
          </div>
       </div>

@@ -10,7 +10,7 @@ import { toggle, toggleClass } from './utils.js';
 let sortBy = "book_reads.read_finished";
 let sortDir = "DESC";
 let page = 1;
-let books_per_page = 10;
+let items_per_page = 10;
 
 /// functions 
 
@@ -68,36 +68,17 @@ async function handleFilters(){
     const form = document.getElementById('filter_form');
 
     if (!filterEventListenerApplied){
-        form.addEventListener('submit', async e => {
+        form.addEventListener('submit', e => {
             e.preventDefault();
             const formData = new FormData(form);
             const rawValues = Object.fromEntries(formData.entries());
             console.log(rawValues);
-            const books = await getUserBooks(1, page, books_per_page, sortBy, sortDir, rawValues);
-            renderBooks(books.data);
+            getUserBooks(1, page, items_per_page, sortBy, sortDir, rawValues);
         })
         filterEventListenerApplied = true;
     }
     
 }
-
-// function to clear inputs from filters 
-
-async function clearSectionInputs(e) {
-  const section = e.closest('.filter_section');
-  if (!section) return;
-
-  const inputs = section.querySelectorAll('input, select, textarea');
-
-  inputs.forEach(input => {
-    if (input.type === 'checkbox' || input.type === 'radio') {
-      input.checked = false;
-    } else {
-      input.value = '';
-    }
-  });
-}
-
 
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -132,7 +113,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         
     })
 
-    //function to handle popup message
     function hideMessage(){
         const message = document.getElementById('message');
         if (message) {
@@ -147,7 +127,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     hideMessage();
 
-    // function to handle search query 
+    const form = document.querySelector('#filter_form');
+
+    // form.addEventListener('submit', event => {
+    //     event.preventDefault(); // ⛔ stops the page from reloading
+    //     handleFilterOptions();  // ✅ run your filter logic or custom behavior
+    // });
+
+
+    // handleFilterOptions()
+
     function searchBooksApi(query) {
         fetch(`/api/search-books?searchTerm=${encodeURIComponent(query)}`)
         .then(res => res.json())
@@ -294,10 +283,6 @@ document.addEventListener('click', async (e) => {
 
     if (e.target.closest('.filter_button')){
         handleFilters();
-    }
-
-    if (e.target.closest('.clear_input_btn')){
-        clearSectionInputs(e.target);
     }
 })
 
