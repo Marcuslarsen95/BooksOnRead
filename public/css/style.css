@@ -176,6 +176,11 @@ nav {
   padding: 5px;
 }
 
+.filter_section {
+  padding: 10px;
+  border-bottom: 1px solid #323c4d;
+}
+
 /* book styling  */
 .book_list {
   display: flex;

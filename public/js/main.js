@@ -6,24 +6,77 @@ import { updateNotes } from './api/updateNotes.js';
 import { deleteRead } from './api/deleteRead.js';
 import { toggle, toggleClass } from './utils.js';
 
-
-// global variables 
-
+/// global 
 let sortBy = "book_reads.read_finished";
 let sortDir = "DESC";
 
 /// functions 
 
-const filter_select = document.getElementById('filter_select');
-const getElements = e => document.querySelectorAll(`.filter_input_${e}`);
+// async function getSelectedFilter(e, sortBy, sortDir){
+    
+//     const section = e.target.closest('.utils');
+//         const content = section.querySelector('.utils_content')
+//         let input = "";
+//         let mod = "";
+//         const filter_field = content.querySelector('.filter_options').value;
+//         let filter_query = "";
+//         switch (filter_field) {
+//             case 'text':
+//                 input = content.querySelector('.filter_input_text').value;
+//                 filter_query = `books.title ILIKE '%${input}%' OR books.author ILIKE '%${input}%'`;
+//                 break;
+//             case 'number':
+//                 input = content.querySelector('.filter_input_number').value;
+//                 mod = content.querySelector('.filter_input_number_mod').value;
+//                 switch (mod) {
+//                     case 'greater':
+//                         filter_query = `ratings.rating > ${input}`;
+//                         break;
+//                     case 'less':
+//                         filter_query = `ratings.rating < ${input}`;
+//                         break;
+//                     case 'equal':
+//                         filter_query = `ratings.rating = ${input}`;
+//                         break;    
+//                 }
+                
+//                 break;
+//         }
+        
+        
+//         const btn = document.querySelector('.utils_toggle');
+        
+//         try {   
+//             const books = await getUserBooks(1,1,10,sortBy,sortDir, filter_query);
+//             renderBooks(books.data);
+//             toggle(content, 'block')
+//             if (!content.classList.contains('invisible')){
+//                 btn.innerHTML = "❌"
+//             } else {
+//                 btn.innerHTML = "📚"
+//             }
+//         } catch (err) {
+//             console.error("Error loading books:", err);
+//         }
+// }
 
-async function handleFilterOptions(){
-    const value = filter_select.value;
-    const options = ['text','date','number','status'];
+let filterEventListenerApplied = false;
 
-    options.forEach(e => {getElements(e).forEach(el => el.classList.add('invisible'))});
-    getElements(value).forEach(el => el.classList.remove('invisible'));
+async function handleFilters(){
+    const form = document.getElementById('filter_form');
+
+    if (!filterEventListenerApplied){
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const rawValues = Object.fromEntries(formData.entries());
+            console.log(rawValues);
+        })
+        filterEventListenerApplied = true;
+    }
+    
 }
+
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -73,13 +126,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const form = document.querySelector('#filter_form');
 
-    form.addEventListener('submit', event => {
-        event.preventDefault(); // ⛔ stops the page from reloading
-        handleFilterOptions();  // ✅ run your filter logic or custom behavior
-    });
+    // form.addEventListener('submit', event => {
+    //     event.preventDefault(); // ⛔ stops the page from reloading
+    //     handleFilterOptions();  // ✅ run your filter logic or custom behavior
+    // });
 
 
-    handleFilterOptions()
+    // handleFilterOptions()
 
     function searchBooksApi(query) {
         fetch(`/api/search-books?searchTerm=${encodeURIComponent(query)}`)
@@ -131,17 +184,15 @@ document.addEventListener('change', (e) => {
     }
 
     /// filtering
-    if (e.target.matches('.filter_options')){
-        const value = e.target.value;
-        var where_clause = "";
-        if (value === "date"){
-            toggle(document.querySelector('.filter_date','block'));
-            toggle(document.querySelector('.filter_number','block'))
-            toggleClass(document.querySelector('.filter_text'),"invisible");
-        }
-    }
-
-    handleFilterOptions()
+    // if (e.target.matches('.filter_options')){
+    //     const value = e.target.value;
+    //     var where_clause = "";
+    //     if (value === "date"){
+    //         toggle(document.querySelector('.filter_date','block'));
+    //         toggle(document.querySelector('.filter_number','block'))
+    //         toggleClass(document.querySelector('.filter_text'),"invisible");
+    //     }
+    // }
 })
 
 // click event handler 
@@ -228,35 +279,7 @@ document.addEventListener('click', async (e) => {
     }
 
     if (e.target.closest('.filter_button')){
-        const section = e.target.closest('.utils');
-        const content = section.querySelector('.utils_content')
-        const input = content.querySelector('input').value;
-        const filter_field = content.querySelector('.filter_options').value;
-        let filter_query = "";
-        switch (filter_field) {
-            case 'text':
-                filter_query = `books.title ILIKE '%${input}%' OR books.author ILIKE '%${input}%'`;
-                break;
-            case 'number':
-                filter_query = `ratings.rating ${input}`;
-                break;
-        }
-        
-        console.log(filter_query);
-        const btn = document.querySelector('.utils_toggle');
-        
-        try {   
-            const books = await getUserBooks(1,1,10,sortBy,sortDir, filter_query);
-            renderBooks(books.data);
-            toggle(content, 'block')
-            if (!content.classList.contains('invisible')){
-                btn.innerHTML = "❌"
-            } else {
-                btn.innerHTML = "📚"
-            }
-        } catch (err) {
-            console.error("Error loading books:", err);
-        }
+        handleFilters();
     }
 })
 

@@ -20,29 +20,39 @@
          <div class="filter utils_section">
             <h4>Filters</h4>
             <form action="" id="filter_form">
-               <input type="text" name="filter-value" class="filter_input filter_text filter_input_text filter_input_number" placeholder="Your query here...">
-               <input type="date" name="filter_value" class="filter_input filter_date filter_input_date">
-
-               <select name="number_filters" class="filter_number filter_input_number">
-                  <option value="greater">Greater than/After</option>
-                  <option value="less">Less than/Before</option>
-                  <option value="equal">Equal to</option>
-                  <option value="between">Between</option>
-               </select>
-
+            <div class="filter_section">
+               <label for="filter-value_text">Author/Name</label>
+               <input type="text" name="filter-value_text" class="filter_input filter_text filter_input_text" placeholder="Your query here...">
+            </div>
+            <div class="filter_section">
+               <label for="">Rating: </label>
+                  <input type="radio" value="greater" name="radio_rating"><label for="greater_than">Greater than</label>
+                  <input type="radio" value="lower" name="radio_rating"><label for="greater_than">Lower than</label>
+                  <input type="radio" value="equal" name="radio_rating"><label for="equal">Equal to</label>
+               <input type="number" name="filter-value_number" class="filter_input filter_number filter_input_number" placeholder="E.g 1, 2, 10">
+            </div>
+            
+            <div class="filter_section">
+               <label for="filter_value_date">Read date: </label>
+               <input type="radio" value="greater" name="radio_date"><label for="greater_than">After date</label>
+                  <input type="radio" value="lower" name="radio_date"><label for="greater_than">Before date</label>
+                  <input type="radio" value="equal" name="radio_date"><label for="equal">Is date</label>
+               <input type="date" name="filter_value_date" class="filter_input filter_date filter_input_date">
+            </div>
+            
+            <div class="filter_section">
+               <label for="status_filters">Status: </label>
                <select name="status_filters" class="filter_number filter_input_status">
                   <option value="1">Not yet started</option>
                   <option value="2">Currently reading/paused</option>
                   <option value="3">Finished</option>
                </select>
+            </div>
+
                
-               <select name="filter_options" class="filter_options" id="filter_select">
-                  <option value="text" selected>Name/author</option>
-                  <option value="number">Rating</option>
-                  <option value="date">Read date</option>
-                  <option value="status">Status</option>
-               </select>
-               <button class="filter_button">🔎</button>
+
+               
+               <button class="filter_button">Apply 🔎</button>
             </form>
          </div>
       </div>
